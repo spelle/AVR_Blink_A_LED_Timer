@@ -10,31 +10,12 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
-enum { UP, DOWN } ;
+
 
 ISR(TIMER1_COMPA_vect)
 {
-	static uint16_t pwm;        /* Note [3] */
-	static uint8_t direction;
-
-	switch (direction)          /* Note [4] */
-	{
-		case UP:
-			if (++pwm == 0xFFFF)
-				direction = DOWN;
-			break;
-
-		case DOWN:
-			if (--pwm == 0)
-				direction = UP;
-			break;
-	}
-
-	OCR1A = pwm;                  /* Note [5] */
-
-
 	// Toggle the LED
-	PORTB ^= (1 << PORTB5); // Toggle the LED
+	PORTB ^= (1 << PORTB5);
 }
 
 
@@ -60,9 +41,6 @@ int main( void )
 	while( 1 )
 	{
 		sleep_mode();
-		//PORTB ^= (1 << PORTB5); // Toggle the LED
-
-		//_delay_ms( 250.0 ) ;
 	}
 
 	return( 0 ) ;
